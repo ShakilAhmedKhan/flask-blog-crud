@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Posts{% endblock %}</h1>
+  {% if g.user %}
+     <a class="action" href="{{ url_for('blog.create') }}"><button class="btn btn-primary float-end"><i class="fas fa-plus"></i> Create New Post </button></a>
+  {% endif %}
+{% endblock %}
+
+
+
+{% block content %}
+  {% for post in posts %}
+    <div class="container" id="featured-3">
+      <div class="row g-4 py-2 row-cols-1 row-cols-lg-12">
+        <div class="feature col">
+          <h2>
+            {{ post['title'] }}
+                    {% if g.user['id'] == post['author_id'] %}
+                      <a class="action" href="{{ url_for('blog.update', id=post['id']) }}"><button class="btn btn-primary"><i class="far fa-edit"></i> Edit</button></a>
+                      <a class="action" href="{{ url_for('blog.delete', id=post['id']) }}"><button class="btn btn-danger" onclick="return confirm('Are you sure?');"><i class="far fa-trash-alt"></i> Delete</button></a>
+                    {% endif %} 
+          </h2>
+          <p style="line-height: 0%;font-weight: bold; font-style: italic;color: rgb(137, 149, 187);">by {{ post['username'] }} on {{ post['created'].strftime('%Y-%m-%d') }}</p>
+          <p style="font-size: 19px;" >{{ post['body'] }}</p>
+        </div>
+      </div>
+    </div>
+    {% if not loop.last %}
+          <hr>
+    {% endif %}
+  {% endfor %}
+{% endblock %}
